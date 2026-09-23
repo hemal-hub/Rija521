@@ -1,0 +1,460 @@
+W<!DOCTYPE html>
+<html lang="bn" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hemal ICT World</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font for Bengali typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Hind Siliguri"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        /* Background watermark styling */
+        .watermark-bg::before {
+            content: "HEMAL";
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 15vw;
+            font-weight: 900;
+            color: rgba(99, 102, 241, 0.03);
+            z-index: 0;
+            pointer-events: none;
+            white-space: nowrap;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col justify-between watermark-bg relative selection:bg-indigo-500 selection:text-white">
+
+    <header class="bg-gradient-to-r from-indigo-700 via-indigo-600 to-blue-600 text-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center backdrop-blur-md border border-white/20 shadow-inner">
+                    <i class="fa-solid fa-graduation-cap text-xl text-indigo-200"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl sm:text-2xl font-bold tracking-tight">Its Only For Rija</h1>
+                    <p class="text-xs text-indigo-200">প্রস্তুতকারী: <span class="font-semibold text-white underline decoration-indigo-400">Hemal</span></p>
+                </div>
+            </div>
+            
+            <!-- Global Search Box -->
+            <div class="w-full md:w-80 relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-search"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="প্রশ্ন বা উত্তর খুঁজুন..." class="w-full pl-10 pr-4 py-2 bg-white/10 border border-white/20 rounded-xl text-sm placeholder-indigo-200 text-white focus:outline-none focus:ring-2 focus:ring-white/50 backdrop-blur-sm transition">
+            </div>
+
+            <!-- Export Buttons -->
+            <div class="flex items-center gap-2">
+                <button onclick="copyContent()" class="px-3.5 py-2 bg-white/10 hover:bg-white/20 text-white text-xs font-medium rounded-xl border border-white/20 backdrop-blur-sm transition flex items-center gap-2 shadow-sm">
+                    <i class="fa-solid fa-copy"></i> কপি করুন
+                </button>
+                <button onclick="downloadHTML()" class="px-3.5 py-2 bg-white text-indigo-700 hover:bg-indigo-50 text-xs font-semibold rounded-xl shadow transition flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> ডাউনলোড
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow z-10 w-full">
+        
+        <!-- Category Tab Navigation -->
+        <div class="flex overflow-x-auto pb-4 mb-6 gap-2 no-scrollbar border-b border-slate-200">
+            <button onclick="filterCategory('all')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-indigo-600 text-white shadow-sm transition" data-target="all">
+                <i class="fa-solid fa-layer-group mr-1.5"></i> সকল প্রশ্ন (২০০)
+            </button>
+            <button onclick="filterCategory('cat1')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition" data-target="cat1">
+                <i class="fa-solid fa-microchip mr-1.5"></i> Fundamentals & Hardware (১-৪০)
+            </button>
+            <button onclick="filterCategory('cat2')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition" data-target="cat2">
+                <i class="fa-brands fa-windows mr-1.5"></i> Windows & OS (৪১-৭০)
+            </button>
+            <button onclick="filterCategory('cat3')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition" data-target="cat3">
+                <i class="fa-solid fa-file-word mr-1.5"></i> MS Word (৭১-১১০)
+            </button>
+            <button onclick="filterCategory('cat4')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition" data-target="cat4">
+                <i class="fa-solid fa-file-excel mr-1.5"></i> MS Excel (১১১-১৫৫)
+            </button>
+            <button onclick="filterCategory('cat5')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition" data-target="cat5">
+                <i class="fa-solid fa-file-powerpoint mr-1.5"></i> MS PowerPoint (১৫৬-১৭৫)
+            </button>
+            <button onclick="filterCategory('cat6')" class="cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition" data-target="cat6">
+                <i class="fa-solid fa-globe mr-1.5"></i> Internet & Security (১৭৬-২০০)
+            </button>
+        </div>
+
+        <!-- Notification Banner -->
+        <div id="toast" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 bg-slate-900 text-white px-5 py-3 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-800">
+            <i class="fa-solid fa-circle-check text-emerald-400 text-lg"></i>
+            <span id="toastMsg" class="text-sm font-medium">কপি করা সফল হয়েছে!</span>
+        </div>
+
+        <!-- Question Cards Grid Container -->
+        <div id="questionContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            <!-- Questions injected via inline HTML dataset -->
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-12 py-6 text-center text-xs text-slate-500 z-10">
+        <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-3">
+            <p>© ২০২৬ কম্পিউটার ও আইসিটি জ্ঞানকোষ | সর্বস্বত্ব সংরক্ষিত</p>
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-2 h-2 rounded-full bg-indigo-500 animate-pulse"></span>
+                <span>Watermark Designer: <strong class="text-indigo-600">Hemal</strong></span>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const qaData = [
+            // Cat 1: Fundamentals & Hardware (1-40)
+            { id: 1, cat: "cat1", q: "কম্পিউটারের জনক কে?", a: "Charles Babbage" },
+            { id: 2, cat: "cat1", q: "আধুনিক কম্পিউটারের জনক কে?", a: "Charles Babbage" },
+            { id: 3, cat: "cat1", q: "কম্পিউটারের মস্তিষ্ক কোনটি?", a: "CPU" },
+            { id: 4, cat: "cat1", q: "CPU-এর পূর্ণরূপ কী?", a: "Central Processing Unit" },
+            { id: 5, cat: "cat1", q: "ALU-এর পূর্ণরূপ কী?", a: "Arithmetic Logic Unit" },
+            { id: 6, cat: "cat1", q: "CU-এর পূর্ণরূপ কী?", a: "Control Unit" },
+            { id: 7, cat: "cat1", q: "RAM-এর পূর্ণরূপ কী?", a: "Random Access Memory" },
+            { id: 8, cat: "cat1", q: "ROM-এর পূর্ণরূপ কী?", a: "Read Only Memory" },
+            { id: 9, cat: "cat1", q: "কোন মেমোরি বিদ্যুৎ চলে গেলে ডাটা হারায়?", a: "RAM" },
+            { id: 10, cat: "cat1", q: "কোন মেমোরি স্থায়ী প্রকৃতির?", a: "ROM" },
+            { id: 11, cat: "cat1", q: "কম্পিউটারে তথ্য প্রবেশ করানোর যন্ত্রকে কী বলে?", a: "Input Device" },
+            { id: 12, cat: "cat1", q: "কম্পিউটার থেকে ফলাফল পাওয়ার যন্ত্রকে কী বলে?", a: "Output Device" },
+            { id: 13, cat: "cat1", q: "Keyboard কী ধরনের ডিভাইস?", a: "Input Device" },
+            { id: 14, cat: "cat1", q: "Mouse কী ধরনের ডিভাইস?", a: "Input Device" },
+            { id: 15, cat: "cat1", q: "Scanner কী ধরনের ডিভাইস?", a: "Input Device" },
+            { id: 16, cat: "cat1", q: "Microphone কী ধরনের ডিভাইস?", a: "Input Device" },
+            { id: 17, cat: "cat1", q: "Monitor কী ধরনের ডিভাইস?", a: "Output Device" },
+            { id: 18, cat: "cat1", q: "Printer কী ধরনের ডিভাইস?", a: "Output Device" },
+            { id: 19, cat: "cat1", q: "Speaker কী ধরনের ডিভাইস?", a: "Output Device" },
+            { id: 20, cat: "cat1", q: "Hard Disk কী কাজে ব্যবহৃত হয়?", a: "Data Storage" },
+            { id: 21, cat: "cat1", q: "SSD-এর পূর্ণরূপ কী?", a: "Solid State Drive" },
+            { id: 22, cat: "cat1", q: "HDD-এর পূর্ণরূপ কী?", a: "Hard Disk Drive" },
+            { id: 23, cat: "cat1", q: "১ Byte সমান কত Bit?", a: "8 Bit" },
+            { id: 24, cat: "cat1", q: "১ KB সমান কত Byte?", a: "1024 Byte" },
+            { id: 25, cat: "cat1", q: "১ MB সমান কত KB?", a: "1024 KB" },
+            { id: 26, cat: "cat1", q: "১ GB সমান কত MB?", a: "1024 MB" },
+            { id: 27, cat: "cat1", q: "১ TB সমান কত GB?", a: "1024 GB" },
+            { id: 28, cat: "cat1", q: "Binary Number System-এর ভিত্তি কত?", a: "2" },
+            { id: 29, cat: "cat1", q: "Binary-তে ব্যবহৃত অঙ্ক কোনগুলো?", a: "0 এবং 1" },
+            { id: 30, cat: "cat1", q: "Decimal Number System-এর ভিত্তি কত?", a: "10" },
+            { id: 31, cat: "cat1", q: "Hardware কী?", a: "কম্পিউটারের দৃশ্যমান ও স্পর্শযোগ্য অংশ" },
+            { id: 32, cat: "cat1", q: "Software কী?", a: "কম্পিউটার পরিচালনার প্রোগ্রাম বা নির্দেশনা" },
+            { id: 33, cat: "cat1", q: "System Software-এর উদাহরণ কী?", a: "Operating System" },
+            { id: 34, cat: "cat1", q: "Application Software-এর উদাহরণ কী?", a: "MS Word" },
+            { id: 35, cat: "cat1", q: "Antivirus-এর কাজ কী?", a: "Virus শনাক্ত ও অপসারণ করা" },
+            { id: 36, cat: "cat1", q: "UPS-এর পূর্ণরূপ কী?", a: "Uninterruptible Power Supply" },
+            { id: 37, cat: "cat1", q: "USB-এর পূর্ণরূপ কী?", a: "Universal Serial Bus" },
+            { id: 38, cat: "cat1", q: "BIOS-এর পূর্ণরূপ কী?", a: "Basic Input/Output System" },
+            { id: 39, cat: "cat1", q: "Booting বলতে কী বোঝায়?", a: "কম্পিউটার চালু হয়ে Operating System লোড হওয়া" },
+            { id: 40, cat: "cat1", q: "Rebooting বলতে কী বোঝায়?", a: "কম্পিউটার পুনরায় চালু করা" },
+
+            // Cat 2: Windows & Operating System (41-70)
+            { id: 41, cat: "cat2", q: "Operating System-এর কাজ কী?", a: "Hardware ও Software নিয়ন্ত্রণ করা" },
+            { id: 42, cat: "cat2", q: "Windows কী?", a: "Operating System" },
+            { id: 43, cat: "cat2", q: "Desktop কী?", a: "Windows চালু হওয়ার পর প্রধান কাজের পর্দা" },
+            { id: 44, cat: "cat2", q: "Taskbar সাধারণত কোথায় থাকে?", a: "Desktop-এর নিচে" },
+            { id: 45, cat: "cat2", q: "Recycle Bin-এর কাজ কী?", a: "Deleted File সাময়িকভাবে সংরক্ষণ করা" },
+            { id: 46, cat: "cat2", q: "Permanently Delete করার Shortcut কী?", a: "Shift + Delete" },
+            { id: 47, cat: "cat2", q: "File Rename করার Shortcut কী?", a: "F2" },
+            { id: 48, cat: "cat2", q: "New Folder তৈরির Shortcut কী?", a: "Ctrl + Shift + N" },
+            { id: 49, cat: "cat2", q: "Refresh করার Key কী?", a: "F5" },
+            { id: 50, cat: "cat2", q: "Run Dialog Box খোলার Shortcut কী?", a: "Windows + R" },
+            { id: 51, cat: "cat2", q: "File Explorer খোলার Shortcut কী?", a: "Windows + E" },
+            { id: 52, cat: "cat2", q: "Desktop দেখানোর Shortcut কী?", a: "Windows + D" },
+            { id: 53, cat: "cat2", q: "Computer Lock করার Shortcut কী?", a: "Windows + L" },
+            { id: 54, cat: "cat2", q: "Active Window পরিবর্তনের Shortcut কী?", a: "Alt + Tab" },
+            { id: 55, cat: "cat2", q: "Active Window বন্ধ করার Shortcut কী?", a: "Alt + F4" },
+            { id: 56, cat: "cat2", q: "Task Manager খোলার Shortcut কী?", a: "Ctrl + Shift + Esc" },
+            { id: 57, cat: "cat2", q: "Select All-এর Shortcut কী?", a: "Ctrl + A" },
+            { id: 58, cat: "cat2", q: "Copy-এর Shortcut কী?", a: "Ctrl + C" },
+            { id: 59, cat: "cat2", q: "Cut-এর Shortcut কী?", a: "Ctrl + X" },
+            { id: 60, cat: "cat2", q: "Paste-এর Shortcut কী?", a: "Ctrl + V" },
+            { id: 61, cat: "cat2", q: "Undo-এর Shortcut কী?", a: "Ctrl + Z" },
+            { id: 62, cat: "cat2", q: "Redo-এর Shortcut কী?", a: "Ctrl + Y" },
+            { id: 63, cat: "cat2", q: "Find-এর Shortcut কী?", a: "Ctrl + F" },
+            { id: 64, cat: "cat2", q: "Save-এর Shortcut কী?", a: "Ctrl + S" },
+            { id: 65, cat: "cat2", q: "Print-এর Shortcut কী?", a: "Ctrl + P" },
+            { id: 66, cat: "cat2", q: "Folder কী?", a: "File সংরক্ষণের স্থান" },
+            { id: 67, cat: "cat2", q: "File Extension কী নির্দেশ করে?", a: "File-এর ধরন" },
+            { id: 68, cat: "cat2", q: ".txt কী ধরনের File?", a: "Text File" },
+            { id: 69, cat: "cat2", q: ".pdf কী ধরনের File?", a: "PDF Document" },
+            { id: 70, cat: "cat2", q: ".jpg কী ধরনের File?", a: "Image File" },
+
+            // Cat 3: MS Word (71-110)
+            { id: 71, cat: "cat3", q: "MS Word কী ধরনের Software?", a: "Word Processing Software" },
+            { id: 72, cat: "cat3", q: "MS Word File-এর Extension কী?", a: ".docx" },
+            { id: 73, cat: "cat3", q: "নতুন Document তৈরির Shortcut কী?", a: "Ctrl + N" },
+            { id: 74, cat: "cat3", q: "Document Open করার Shortcut কী?", a: "Ctrl + O" },
+            { id: 75, cat: "cat3", q: "Save As-এর Shortcut কী?", a: "F12" },
+            { id: 76, cat: "cat3", q: "Bold-এর Shortcut কী?", a: "Ctrl + B" },
+            { id: 77, cat: "cat3", q: "Italic-এর Shortcut কী?", a: "Ctrl + I" },
+            { id: 78, cat: "cat3", q: "Underline-এর Shortcut কী?", a: "Ctrl + U" },
+            { id: 79, cat: "cat3", q: "Left Align-এর Shortcut কী?", a: "Ctrl + L" },
+            { id: 80, cat: "cat3", q: "Center Align-এর Shortcut কী?", a: "Ctrl + E" },
+            { id: 81, cat: "cat3", q: "Right Align-এর Shortcut কী?", a: "Ctrl + R" },
+            { id: 82, cat: "cat3", q: "Justify-এর Shortcut কী?", a: "Ctrl + J" },
+            { id: 83, cat: "cat3", q: "Font Size বাড়ানোর Shortcut কী?", a: "Ctrl + Shift + >" },
+            { id: 84, cat: "cat3", q: "Font Size কমানোর Shortcut কী?", a: "Ctrl + Shift + <" },
+            { id: 85, cat: "cat3", q: "Find and Replace-এর Shortcut কী?", a: "Ctrl + H" },
+            { id: 86, cat: "cat3", q: "Go To-এর Shortcut কী?", a: "Ctrl + G" },
+            { id: 87, cat: "cat3", q: "Page Break-এর Shortcut কী?", a: "Ctrl + Enter" },
+            { id: 88, cat: "cat3", q: "Spell Check-এর Key কী?", a: "F7" },
+            { id: 89, cat: "cat3", q: "Superscript-এর Shortcut কী?", a: "Ctrl + Shift + =" },
+            { id: 90, cat: "cat3", q: "Subscript-এর Shortcut কী?", a: "Ctrl + =" },
+            { id: 91, cat: "cat3", q: "Word-এ Table কোন Tab থেকে Insert করা হয়?", a: "Insert Tab" },
+            { id: 92, cat: "cat3", q: "Picture কোন Tab থেকে Insert করা হয়?", a: "Insert Tab" },
+            { id: 93, cat: "cat3", q: "Header কোথায় থাকে?", a: "Page-এর উপরের অংশে" },
+            { id: 94, cat: "cat3", q: "Footer কোথায় থাকে?", a: "Page-এর নিচের অংশে" },
+            { id: 95, cat: "cat3", q: "Page Number কোন Tab থেকে দেওয়া হয়?", a: "Insert Tab" },
+            { id: 96, cat: "cat3", q: "Page Orientation কয় ধরনের?", a: "2 ধরনের" },
+            { id: 97, cat: "cat3", q: "Page Orientation কী কী?", a: "Portrait এবং Landscape" },
+            { id: 98, cat: "cat3", q: "Margin কী?", a: "Page-এর চারপাশের ফাঁকা জায়গা" },
+            { id: 99, cat: "cat3", q: "Line Spacing কী?", a: "দুই লাইনের মধ্যবর্তী দূরত্ব" },
+            { id: 100, cat: "cat3", q: "Paragraph কী?", a: "এক বা একাধিক বাক্যের সমষ্টি" },
+            { id: 101, cat: "cat3", q: "Bullets কী কাজে ব্যবহৃত হয়?", a: "তালিকা তৈরিতে" },
+            { id: 102, cat: "cat3", q: "Numbering কী কাজে ব্যবহৃত হয়?", a: "ক্রমিক তালিকা তৈরিতে" },
+            { id: 103, cat: "cat3", q: "Mail Merge কী কাজে ব্যবহৃত হয়?", a: "একই চিঠি বহু ব্যক্তির জন্য তৈরি করতে" },
+            { id: 104, cat: "cat3", q: "Watermark কী?", a: "Document-এর পেছনে হালকা লেখা বা ছবি" },
+            { id: 105, cat: "cat3", q: "WordArt কী?", a: "Stylish Text তৈরির সুবিধা" },
+            { id: 106, cat: "cat3", q: "Clipboard কী কাজে ব্যবহৃত হয়?", a: "Copy/Cut করা Data সাময়িক রাখতে" },
+            { id: 107, cat: "cat3", q: "Print Preview-এর কাজ কী?", a: "Print-এর আগে Document দেখা" },
+            { id: 108, cat: "cat3", q: "Text Highlight কী কাজে ব্যবহৃত হয়?", a: "Text চিহ্নিত করতে" },
+            { id: 109, cat: "cat3", q: "Format Painter-এর কাজ কী?", a: "এক জায়গার Formatting অন্য জায়গায় প্রয়োগ করা" },
+            { id: 110, cat: "cat3", q: "Word Count কী দেখায়?", a: "Document-এর মোট শব্দসংখ্যা" },
+
+            // Cat 4: MS Excel (111-155)
+            { id: 111, cat: "cat4", q: "MS Excel কী ধরনের Software?", a: "Spreadsheet Software" },
+            { id: 112, cat: "cat4", q: "Excel File-এর Extension কী?", a: ".xlsx" },
+            { id: 113, cat: "cat4", q: "Excel-এর একটি File-কে কী বলে?", a: "Workbook" },
+            { id: 114, cat: "cat4", q: "Workbook-এর প্রতিটি পাতাকে কী বলে?", a: "Worksheet" },
+            { id: 115, cat: "cat4", q: "Excel-এর অনুভূমিক অংশকে কী বলে?", a: "Row" },
+            { id: 116, cat: "cat4", q: "Excel-এর উল্লম্ব অংশকে কী বলে?", a: "Column" },
+            { id: 117, cat: "cat4", q: "Row Number কী দিয়ে প্রকাশ করা হয়?", a: "সংখ্যা দিয়ে" },
+            { id: 118, cat: "cat4", q: "Column কী দিয়ে প্রকাশ করা হয়?", a: "Letter দিয়ে" },
+            { id: 119, cat: "cat4", q: "Row ও Column-এর মিলিত ঘরকে কী বলে?", a: "Cell" },
+            { id: 120, cat: "cat4", q: "প্রথম Cell Address কী?", a: "A1" },
+            { id: 121, cat: "cat4", q: "Active Cell কী?", a: "বর্তমানে নির্বাচিত Cell" },
+            { id: 122, cat: "cat4", q: "Excel Formula কোন চিহ্ন দিয়ে শুরু হয়?", a: "=" },
+            { id: 123, cat: "cat4", q: "যোগ করার Function কী?", a: "SUM" },
+            { id: 124, cat: "cat4", q: "গড় বের করার Function কী?", a: "AVERAGE" },
+            { id: 125, cat: "cat4", q: "সর্বোচ্চ মান বের করার Function কী?", a: "MAX" },
+            { id: 126, cat: "cat4", q: "সর্বনিম্ন মান বের করার Function কী?", a: "MIN" },
+            { id: 127, cat: "cat4", q: "সংখ্যা গণনার Function কী?", a: "COUNT" },
+            { id: 128, cat: "cat4", q: "ফাঁকা নয় এমন Cell গণনার Function কী?", a: "COUNTA" },
+            { id: 129, cat: "cat4", q: "শর্ত অনুযায়ী ফলাফল দিতে কোন Function ব্যবহৃত হয়?", a: "IF" },
+            { id: 130, cat: "cat4", q: "=SUM(A1:A5) কী করবে?", a: "A1 থেকে A5 পর্যন্ত যোগ করবে" },
+            { id: 131, cat: "cat4", q: "=AVERAGE(B1:B5) কী করবে?", a: "B1 থেকে B5-এর গড় বের করবে" },
+            { id: 132, cat: "cat4", q: "=MAX(C1:C10) কী করবে?", a: "সর্বোচ্চ মান বের করবে" },
+            { id: 133, cat: "cat4", q: "=MIN(C1:C10) কী করবে?", a: "সর্বনিম্ন মান বের করবে" },
+            { id: 134, cat: "cat4", q: "=COUNT(A1:A10) কী করবে?", a: "সংখ্যাযুক্ত Cell গণনা করবে" },
+            { id: 135, cat: "cat4", q: "Pass/Fail বের করতে কোন Function বেশি ব্যবহৃত হয়?", a: "IF" },
+            { id: 136, cat: "cat4", q: "Percentage-এর সাধারণ Formula কী?", a: "Obtained Marks ÷ Total Marks × 100" },
+            { id: 137, cat: "cat4", q: "Excel-এ Formula Bar কোথায় থাকে?", a: "Worksheet-এর উপরে" },
+            { id: 138, cat: "cat4", q: "Name Box কী দেখায়?", a: "Active Cell-এর Address" },
+            { id: 139, cat: "cat4", q: "AutoSum-এর Shortcut কী?", a: "Alt + =" },
+            { id: 140, cat: "cat4", q: "Cell Edit করার Key কী?", a: "F2" },
+            { id: 141, cat: "cat4", q: "নতুন Workbook-এর Shortcut কী?", a: "Ctrl + N" },
+            { id: 142, cat: "cat4", q: "Workbook Save-এর Shortcut কী?", a: "Ctrl + S" },
+            { id: 143, cat: "cat4", q: "Excel-এ Copy-এর Shortcut কী?", a: "Ctrl + C" },
+            { id: 144, cat: "cat4", q: "Excel-এ Paste-এর Shortcut কী?", a: "Ctrl + V" },
+            { id: 145, cat: "cat4", q: "Excel-এ Cut-এর Shortcut কী?", a: "Ctrl + X" },
+            { id: 146, cat: "cat4", q: "Chart কী কাজে ব্যবহৃত হয়?", a: "Data গ্রাফিক্যালভাবে দেখাতে" },
+            { id: 147, cat: "cat4", q: "Pie Chart কী দেখায়?", a: "সম্পূর্ণের অংশসমূহ" },
+            { id: 148, cat: "cat4", q: "Column Chart কী দেখায়?", a: "Data তুলনা" },
+            { id: 149, cat: "cat4", q: "Sort কী কাজে ব্যবহৃত হয়?", a: "Data সাজাতে" },
+            { id: 150, cat: "cat4", q: "Filter কী কাজে ব্যবহৃত হয়?", a: "নির্দিষ্ট Data প্রদর্শন করতে" },
+            { id: 151, cat: "cat4", q: "Merge & Center-এর কাজ কী?", a: "একাধিক Cell একত্র করে Text মাঝখানে রাখা" },
+            { id: 152, cat: "cat4", q: "Wrap Text কী করে?", a: "একই Cell-এর মধ্যে Text একাধিক লাইনে দেখায়" },
+            { id: 153, cat: "cat4", q: "Absolute Cell Reference-এর উদাহরণ কী?", a: "$A$1" },
+            { id: 154, cat: "cat4", q: "Relative Cell Reference-এর উদাহরণ কী?", a: "A1" },
+            { id: 155, cat: "cat4", q: "Excel-এ Sheet-এর নাম পরিবর্তন করাকে কী বলে?", a: "Rename Sheet" },
+
+            // Cat 5: MS PowerPoint (156-175)
+            { id: 156, cat: "cat5", q: "MS PowerPoint কী ধরনের Software?", a: "Presentation Software" },
+            { id: 157, cat: "cat5", q: "PowerPoint File-এর Extension কী?", a: ".pptx" },
+            { id: 158, cat: "cat5", q: "PowerPoint-এর একটি Page-কে কী বলে?", a: "Slide" },
+            { id: 159, cat: "cat5", q: "New Slide-এর Shortcut কী?", a: "Ctrl + M" },
+            { id: 160, cat: "cat5", q: "Slide Show শুরু করার Key কী?", a: "F5" },
+            { id: 161, cat: "cat5", q: "Current Slide থেকে Slide Show-এর Shortcut কী?", a: "Shift + F5" },
+            { id: 162, cat: "cat5", q: "Slide Layout কী?", a: "Slide-এর Content বিন্যাস" },
+            { id: 163, cat: "cat5", q: "Theme কী?", a: "Presentation-এর সামগ্রিক Design" },
+            { id: 164, cat: "cat5", q: "Transition কী?", a: "এক Slide থেকে অন্য Slide-এ যাওয়ার Effect" },
+            { id: 165, cat: "cat5", q: "Animation কী?", a: "Slide-এর Object-এর উপর প্রয়োগ করা Effect" },
+            { id: 166, cat: "cat5", q: "Picture কোন Tab থেকে Insert করা হয়?", a: "Insert Tab" },
+            { id: 167, cat: "cat5", q: "Text Box কোন Tab থেকে Insert করা হয়?", a: "Insert Tab" },
+            { id: 168, cat: "cat5", q: "Chart কোন Tab থেকে Insert করা হয়?", a: "Insert Tab" },
+            { id: 169, cat: "cat5", q: "Duplicate Slide কী করে?", a: "একই Slide-এর Copy তৈরি করে" },
+            { id: 170, cat: "cat5", q: "Slide Sorter View কী কাজে লাগে?", a: "Slide-এর ক্রম সাজাতে" },
+            { id: 171, cat: "cat5", q: "Notes কী কাজে ব্যবহৃত হয়?", a: "Presenter-এর অতিরিক্ত তথ্য রাখতে" },
+            { id: 172, cat: "cat5", q: "Presentation Save-এর Shortcut কী?", a: "Ctrl + S" },
+            { id: 173, cat: "cat5", q: "PowerPoint Print-এর Shortcut কী?", a: "Ctrl + P" },
+            { id: 174, cat: "cat5", q: "Slide Delete করতে কোন Key ব্যবহার করা যায়?", a: "Delete" },
+            { id: 175, cat: "cat5", q: "PowerPoint-এর প্রধান কাজ কী?", a: "Slide Presentation তৈরি করা" },
+
+            // Cat 6: Internet & Security (176-200)
+            { id: 176, cat: "cat6", q: "Internet কী?", a: "বিশ্বব্যাপী সংযুক্ত Computer Network" },
+            { id: 177, cat: "cat6", q: "WWW-এর পূর্ণরূপ কী?", a: "World Wide Web" },
+            { id: 178, cat: "cat6", q: "Website কী?", a: "সম্পর্কিত একাধিক Web Page-এর সমষ্টি" },
+            { id: 179, cat: "cat6", q: "Web Page কী?", a: "Website-এর একটি Page" },
+            { id: 180, cat: "cat6", q: "URL-এর পূর্ণরূপ কী?", a: "Uniform Resource Locator" },
+            { id: 181, cat: "cat6", q: "Browser কী?", a: "Website দেখার Software" },
+            { id: 182, cat: "cat6", q: "Google Chrome কী?", a: "Web Browser" },
+            { id: 183, cat: "cat6", q: "Mozilla Firefox কী?", a: "Web Browser" },
+            { id: 184, cat: "cat6", q: "Microsoft Edge কী?", a: "Web Browser" },
+            { id: 185, cat: "cat6", q: "Google কী?", a: "Search Engine" },
+            { id: 186, cat: "cat6", q: "Search Engine-এর কাজ কী?", a: "Internet-এ তথ্য খোঁজা" },
+            { id: 187, cat: "cat6", q: "Download কী?", a: "Internet থেকে Device-এ File আনা" },
+            { id: 188, cat: "cat6", q: "Upload কী?", a: "Device থেকে Internet-এ File পাঠানো" },
+            { id: 189, cat: "cat6", q: "Email-এর পূর্ণরূপ কী?", a: "Electronic Mail" },
+            { id: 190, cat: "cat6", q: "Email-এ To কী বোঝায়?", a: "প্রধান প্রাপক" },
+            { id: 191, cat: "cat6", q: "CC-এর পূর্ণরূপ কী?", a: "Carbon Copy" },
+            { id: 192, cat: "cat6", q: "BCC-এর পূর্ণরূপ কী?", a: "Blind Carbon Copy" },
+            { id: 193, cat: "cat6", q: "Attachment কী?", a: "Email-এর সঙ্গে পাঠানো File" },
+            { id: 194, cat: "cat6", q: "Spam Email কী?", a: "অনাকাঙ্ক্ষিত Email" },
+            { id: 195, cat: "cat6", q: "Phishing কী?", a: "প্রতারণার মাধ্যমে ব্যক্তিগত তথ্য চুরি করার চেষ্টা" },
+            { id: 196, cat: "cat6", q: "Strong Password কেমন হওয়া উচিত?", a: "Letter, Number ও Special Character-এর সমন্বয়" },
+            { id: 197, cat: "cat6", q: "OTP-এর পূর্ণরূপ কী?", a: "One Time Password" },
+            { id: 198, cat: "cat6", q: "CAPTCHA-এর কাজ কী?", a: "ব্যবহারকারী মানুষ নাকি Bot তা যাচাই করা" },
+            { id: 199, cat: "cat6", q: "Online Form Submit করার আগে কী করা উচিত?", a: "তথ্য পুনরায় যাচাই করা" },
+            { id: 200, cat: "cat6", q: "ব্যক্তিগত Password বা OTP অন্যকে দেওয়া উচিত কি?", a: "না" }
+        ];
+
+        let currentActiveCategory = 'all';
+
+        function renderQuestions(dataToRender) {
+            const container = document.getElementById('questionContainer');
+            if (dataToRender.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full py-16 text-center">
+                        <div class="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-3 text-slate-400 text-xl">
+                            <i class="fa-solid fa-face-frown"></i>
+                        </div>
+                        <p class="text-slate-500 font-medium">কোনো প্রশ্ন খুঁজে পাওয়া যায়নি!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = dataToRender.map(item => `
+                <div class="bg-white p-5 rounded-2xl shadow-sm hover:shadow-md border border-slate-200/80 transition flex flex-col justify-between group">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-xs font-bold px-2.5 py-1 bg-indigo-50 text-indigo-600 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition">প্রশ্ন #${item.id}</span>
+                            <span class="text-xs text-slate-400 uppercase tracking-wide font-mono">${item.cat}</span>
+                        </div>
+                        <h3 class="text-base font-semibold text-slate-800 mb-3 leading-snug">${item.q}</h3>
+                    </div>
+                    <div class="bg-slate-50 border border-slate-100 px-3.5 py-2.5 rounded-xl mt-2 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check text-emerald-500 text-xs"></i>
+                        <span class="text-sm font-bold text-slate-700">${item.a}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(cat) {
+            currentActiveCategory = cat;
+            
+            // Update Tab styles
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if(btn.dataset.target === cat) {
+                    btn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-indigo-600 text-white shadow-sm transition";
+                } else {
+                    btn.className = "cat-btn px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap bg-white text-slate-600 hover:bg-indigo-50 hover:text-indigo-600 border border-slate-200 transition";
+                }
+            });
+
+            applyFilters();
+        }
+
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            let filtered = qaData;
+
+            if (currentActiveCategory !== 'all') {
+                filtered = filtered.filter(item => item.cat === currentActiveCategory);
+            }
+
+            if (query.trim() !== '') {
+                filtered = filtered.filter(item => 
+                    item.q.toLowerCase().includes(query) || 
+                    item.a.toLowerCase().includes(query) ||
+                    item.id.toString().includes(query)
+                );
+            }
+
+            renderQuestions(filtered);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').innerText = msg;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3000);
+        }
+
+        function copyContent() {
+            let textToCopy = "কম্পিউটার ও আইসিটি সাধারণ জ্ঞান (২০০ প্রশ্ন)\nWatermark: Hemal\n\n";
+            qaData.forEach(item => {
+                textToCopy += `${item.id}. ${item.q} — ${item.a}\n`;
+            });
+
+            const textarea = document.createElement('textarea');
+            textarea.value = textToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                showToast('সমস্ত ২০০টি প্রশ্ন সফলভাবে কপি করা হয়েছে!');
+            } catch (err) {
+                showToast('কপি করতে সমস্যা হয়েছে!');
+            }
+            document.body.removeChild(textarea);
+        }
+
+        function downloadHTML() {
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ICT_Questions_Hemal.html';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            showToast('এইচটিএমএল ফাইল সফলভাবে ডাউনলোড হয়েছে!');
+        }
+
+        // Initial render on load
+        window.onload = function() {
+            renderQuestions(qaData);
+        };
+    </script>
+</body>
+</html>
